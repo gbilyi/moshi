@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.squareup.moshi.recipes;
+package com.squareup.moshi.recipes.models;
 
-import com.squareup.moshi.recipes.models.BaseWidget;
-import com.squareup.moshi.recipes.models.Container;
+public final class Widget2 implements BaseWidget {
+  public final String color;
 
-public final class Main {
-  public final Container container;
+  public Widget2(String color) {
+    this.color = color;
+  }
 
-  public Main(Container container) {
-    this.container = container;
+  @Override public String toString() {
+    return String.format("%s", color);
   }
 }

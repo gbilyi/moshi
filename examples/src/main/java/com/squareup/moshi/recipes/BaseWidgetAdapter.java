@@ -19,40 +19,40 @@ import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.ToJson;
-import com.squareup.moshi.recipes.models.*;
-import okio.BufferedSink;
+import com.squareup.moshi.recipes.models.BaseWidget;
+import com.squareup.moshi.recipes.models.Container;
+import com.squareup.moshi.recipes.models.Widget1;
+import com.squareup.moshi.recipes.models.Widget2;
 
 import java.io.IOException;
-import java.util.List;
 
 final class BaseWidgetAdapter {
 
     @ToJson
     void write(JsonWriter writer, BaseWidget baseWidget, JsonAdapter<Container> delegate) throws IOException {
-        if (baseWidget instanceof Widget) {
+        if (baseWidget instanceof Widget1 || baseWidget instanceof Widget2) {
             writeWidget(writer, baseWidget);
         } else {
-            Container container = (Container) baseWidget;
-//            writeWidgetsArray(writer, container.children);
-            delegate.toJson(writer, container);
-
+            delegate.toJson(writer, (Container) baseWidget);
         }
     }
 
 
     private void writeWidget(JsonWriter writer, BaseWidget baseWidget) throws IOException {
         writer.beginObject();
-        Widget widget = (Widget) baseWidget;
-        writer.name("color").value(widget.color);
-        writer.endObject();
-    }
 
-    public void writeWidgetsArray(JsonWriter writer, List<BaseWidget> widgets) throws IOException {
-        writer.beginArray();
-        for (BaseWidget widget : widgets) {
-            writeWidget(writer, widget);
+        if (baseWidget instanceof Widget1) {
+            Widget1 widget = (Widget1) baseWidget;
+            writer.name("name").value("widget1");
+            writer.name("color").value(widget.color);
+
+        } else if (baseWidget instanceof Widget2) {
+            Widget2 widget = (Widget2) baseWidget;
+            writer.name("name").value("widget2");
+            writer.name("color").value(widget.color);
         }
-        writer.endArray();
+
+        writer.endObject();
     }
 
     @FromJson
@@ -60,6 +60,6 @@ final class BaseWidgetAdapter {
         if (json.equals("BLA-ZZZ")) {
             //return new Container();
         }
-        return new Widget(json);
+        return new Widget1(json);
     }
 }

@@ -21,23 +21,18 @@ import com.squareup.moshi.recipes.models.*;
 
 import java.util.Arrays;
 
-import static com.squareup.moshi.recipes.models.Suit.*;
-
 public final class WriteWidgetJson {
     public void run() {
-        BaseWidget widget1 = new Widget("BLUE");
-        BaseWidget widget2 = new Widget("GREEN");
+        BaseWidget widget1 = new Widget1("BLUE");
+        BaseWidget widget2 = new Widget2("GREEN");
 
         Container nestedContainer = new Container(Arrays.asList(widget1, widget2));
-
         Container container = new Container(Arrays.asList(nestedContainer, widget2));
 
-        Main main = new Main(container);
-
         Moshi moshi = new Moshi.Builder().add(new BaseWidgetAdapter()).build();
-        JsonAdapter<Main> jsonAdapter = moshi.adapter(Main.class).indent(" ");
+        JsonAdapter<Container> jsonAdapter = moshi.adapter(Container.class).indent(" ");
 
-        String json = jsonAdapter.toJson(main);
+        String json = jsonAdapter.toJson(container);
         System.out.println(json);
     }
 

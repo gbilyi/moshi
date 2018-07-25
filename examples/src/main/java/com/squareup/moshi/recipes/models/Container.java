@@ -18,15 +18,15 @@ package com.squareup.moshi.recipes.models;
 import java.util.List;
 
 @SuppressWarnings("checkstyle:membername")
-public final class Container extends BaseWidget {
-    public final List<BaseWidget> children;
+public final class Container implements BaseWidget {
+    public final List<BaseWidget> widgets;
 
     public Container(List<BaseWidget> children) {
-        this.children = children;
+        this.widgets = children;
     }
 
     @Override
     public String toString() {
-        return "children=" + children;
+        return "widgets=" + widgets;
     }
 }

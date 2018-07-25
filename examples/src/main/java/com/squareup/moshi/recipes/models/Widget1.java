@@ -15,10 +15,10 @@
  */
 package com.squareup.moshi.recipes.models;
 
-public final class Widget extends BaseWidget {
+public final class Widget1 implements BaseWidget {
   public final String color;
 
-  public Widget(String color) {
+  public Widget1(String color) {
     this.color = color;
   }
 
