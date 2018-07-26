@@ -15,14 +15,36 @@
  */
 package com.squareup.moshi.recipes.models;
 
+import java.util.Objects;
+
 public final class Widget1 implements BaseWidget {
-  public final String color;
+    public String name;
+    public final String color;
 
-  public Widget1(String color) {
-    this.color = color;
-  }
+    public Widget1(String color) {
+        this.name = Widget1.class.getCanonicalName();
+        this.color = color;
+    }
 
-  @Override public String toString() {
-    return String.format("%s", color);
-  }
+    @Override
+    public String toString() {
+        return "\nWidget1{" +
+                "name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Widget1 widget1 = (Widget1) o;
+        return Objects.equals(name, widget1.name) &&
+                Objects.equals(color, widget1.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, color);
+    }
 }

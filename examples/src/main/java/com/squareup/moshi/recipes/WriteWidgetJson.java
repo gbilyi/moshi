@@ -19,24 +19,45 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.recipes.models.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public final class WriteWidgetJson {
     public void run() {
         BaseWidget widget1 = new Widget1("BLUE");
         BaseWidget widget2 = new Widget2("GREEN");
+        BaseWidget widget3 = new Widget2("RED");
 
-        Container nestedContainer = new Container(Arrays.asList(widget1, widget2));
+        Container nestedContainer2 = new Container(Arrays.asList(widget2, widget3));
+        Container nestedContainer = new Container(Arrays.asList(widget1, nestedContainer2));
         Container container = new Container(Arrays.asList(nestedContainer, widget2));
+
+        System.out.println("original object: " + container);
 
         Moshi moshi = new Moshi.Builder().add(new BaseWidgetAdapter()).build();
         JsonAdapter<Container> jsonAdapter = moshi.adapter(Container.class).indent(" ");
 
         String json = jsonAdapter.toJson(container);
         System.out.println(json);
+
+        try {
+            Container widget = jsonAdapter.fromJson(json);
+            System.out.println("widget: " + widget);
+
+            if (widget.equals(container)) {
+                System.out.println("Deserialized result is identical");
+            } else {
+                System.out.println("Original and deserialized objects are different!");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new WriteWidgetJson().run();
     }
 }

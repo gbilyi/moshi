@@ -16,17 +16,31 @@
 package com.squareup.moshi.recipes.models;
 
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("checkstyle:membername")
 public final class Container implements BaseWidget {
     public final List<BaseWidget> widgets;
 
-    public Container(List<BaseWidget> children) {
-        this.widgets = children;
+    public Container(List<BaseWidget> widgets) {
+        this.widgets = widgets;
     }
 
     @Override
     public String toString() {
         return "widgets=" + widgets;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Container container = (Container) o;
+        return Objects.equals(widgets, container.widgets);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(widgets);
     }
 }

@@ -15,16 +15,14 @@
  */
 package com.squareup.moshi.recipes;
 
-import com.squareup.moshi.FromJson;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.JsonWriter;
-import com.squareup.moshi.ToJson;
+import com.squareup.moshi.*;
 import com.squareup.moshi.recipes.models.BaseWidget;
 import com.squareup.moshi.recipes.models.Container;
 import com.squareup.moshi.recipes.models.Widget1;
 import com.squareup.moshi.recipes.models.Widget2;
 
 import java.io.IOException;
+import java.util.Map;
 
 final class BaseWidgetAdapter {
 
@@ -37,29 +35,52 @@ final class BaseWidgetAdapter {
         }
     }
 
-
     private void writeWidget(JsonWriter writer, BaseWidget baseWidget) throws IOException {
         writer.beginObject();
 
         if (baseWidget instanceof Widget1) {
             Widget1 widget = (Widget1) baseWidget;
-            writer.name("name").value("widget1");
+            writer.name("name").value(Widget1.class.getCanonicalName());
             writer.name("color").value(widget.color);
 
         } else if (baseWidget instanceof Widget2) {
             Widget2 widget = (Widget2) baseWidget;
-            writer.name("name").value("widget2");
+            writer.name("name").value(Widget2.class.getCanonicalName());
             writer.name("color").value(widget.color);
         }
 
         writer.endObject();
     }
 
+    /*
+       is called for every object at the first level.
+     */
     @FromJson
-    BaseWidget fromJson(String json) {
-        if (json.equals("BLA-ZZZ")) {
-            //return new Container();
+    BaseWidget fromJson(JsonReader reader,
+                        JsonAdapter<Container> containerDelegate,
+                        JsonAdapter<Widget1> widget1Delegate,
+                        JsonAdapter<Widget2> widget2Delegate) throws IOException {
+        Map<String, String> map = (Map<String, String>) reader.readJsonValue();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getKey().equals("widgets")) {
+                return containerDelegate.fromJsonValue(map);
+            } else {
+
+                String widget1Name = Widget1.class.getCanonicalName();
+                String widget2Name = Widget2.class.getCanonicalName();
+
+                if (entry.getValue().equals(widget1Name)) {
+                    return widget1Delegate.fromJsonValue(map);
+                } else if (entry.getValue().equals(widget2Name)) {
+                    return widget2Delegate.fromJsonValue(map);
+                } else {
+                    //another widget
+                }
+            }
         }
-        return new Widget1(json);
+        //should not reach here.
+        return null;
     }
+
+
 }
