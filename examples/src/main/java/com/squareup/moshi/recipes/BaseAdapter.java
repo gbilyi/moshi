@@ -16,20 +16,17 @@
 package com.squareup.moshi.recipes;
 
 import com.squareup.moshi.*;
-import com.squareup.moshi.recipes.models.BaseWidget;
-import com.squareup.moshi.recipes.models.Container;
-import com.squareup.moshi.recipes.models.Widget1;
-import com.squareup.moshi.recipes.models.Widget2;
+import com.squareup.moshi.recipes.models.*;
 
 import java.io.IOException;
 import java.util.Map;
 
-final class BaseWidgetAdapter {
+final class BaseAdapter {
 
     @ToJson
-    void write(JsonWriter writer, BaseWidget baseWidget, JsonAdapter<Container> delegate) throws IOException {
+    void write(JsonWriter writer, Base baseWidget, JsonAdapter<Container> delegate) throws IOException {
         if (baseWidget instanceof Widget1 || baseWidget instanceof Widget2) {
-            writeWidget(writer, baseWidget);
+            writeWidget(writer, (BaseWidget) baseWidget);
         } else {
             delegate.toJson(writer, (Container) baseWidget);
         }
@@ -56,7 +53,7 @@ final class BaseWidgetAdapter {
        is called for every object at the first level.
      */
     @FromJson
-    BaseWidget fromJson(JsonReader reader,
+    Base fromJson(JsonReader reader,
                         JsonAdapter<Container> containerDelegate,
                         JsonAdapter<Widget1> widget1Delegate,
                         JsonAdapter<Widget2> widget2Delegate) throws IOException {

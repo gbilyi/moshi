@@ -17,7 +17,7 @@ package com.squareup.moshi.recipes.models;
 
 import java.util.Objects;
 
-public final class Widget1 implements BaseWidget {
+public final class Widget1 extends Widget {
     public String name;
     public final String color;
 

@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("checkstyle:membername")
-public final class Container implements BaseWidget {
-    public final List<BaseWidget> widgets;
+public final class Container extends ConstraintLayout implements BaseContainer {
+    public final List<Base> widgets;
 
-    public Container(List<BaseWidget> widgets) {
+    public Container(List<Base> widgets) {
         this.widgets = widgets;
     }
 
